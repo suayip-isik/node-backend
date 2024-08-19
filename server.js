@@ -1,9 +1,7 @@
 import express from "express";
-// import sequelize from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
-import db from "./app/Models/index.js";
 import userRoutes from "./app/Routes/userRoutes.js";
 
 const PORT = process.env.PORT || 8080;

@@ -82,4 +82,19 @@ const getUsers = async (req, res) => {
   }
 };
 
-export { signup, login, getUsers };
+const uploadPhoto = async (req, res) => {
+  try {
+    const { file } = req;
+    if (!file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+    res.json({
+      message: "File uploaded successfully",
+      filename: file.filename,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { signup, login, getUsers, uploadPhoto };
