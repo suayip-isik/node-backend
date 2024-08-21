@@ -21,6 +21,15 @@ const signup = async (req, res) => {
       country,
       city,
     } = req.body;
+    const requiredFields = ["userName", "email", "password", "name", "surname"];
+    for (const field of requiredFields) {
+      if (!req.body[field]) {
+        return res.status(400).json({
+          success: false,
+          message: `${field} alanı zorunludur`,
+        });
+      }
+    }
     let formattedBirthday = moment(birthday, "D-M-YYYY");
     const data = {
       userName,
@@ -43,7 +52,12 @@ const signup = async (req, res) => {
       });
 
       res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-      return res.status(201).json({ ...user.dataValues, token });
+      return res.status(201).json({
+        status: true,
+        message: "Kullanıcı başarıyla kaydedildi",
+        token,
+        user,
+      });
     } else {
       return res.status(409).json({
         success: false,
@@ -75,12 +89,17 @@ const login = async (req, res) => {
         });
 
         res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-        return res.status(201).send({ ...user.dataValues, token });
+        return res.status(200).send({ ...user.dataValues, token });
       } else {
-        return res.status(401).send("Authentication failed 1");
+        return res.status(401).json({
+          status: false,
+          message: "Parolanızı kontrol ederek tekrar giriş yapmayı deneyiniz",
+        });
       }
     } else {
-      return res.status(401).send("Authentication failed 2");
+      return res
+        .status(401)
+        .json({ status: false, message: "Kayıtlı kullanıcı bulunamadı" });
     }
   } catch (error) {
     console.log(error);
