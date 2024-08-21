@@ -14,10 +14,16 @@ router.post("/signup", saveUser, signup);
 
 router.post("/login", login);
 
-router.get("/users", getUsers);
+router.get("/getAllUsers", getUsers);
 
 router.post(
-  "/users/uploadUserProfilePhoto/:id",
+  "/uploadUserProfilePhoto/:id",
+  upload.single("file"),
+  uploadUserProfilePhoto
+);
+
+router.get(
+  "/getUserProfilePhoto/:id",
   upload.single("file"),
   uploadUserProfilePhoto
 );

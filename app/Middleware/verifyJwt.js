@@ -4,7 +4,7 @@ const verifyJwt = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
-  const allowedPaths = ["/api/users/login", "/api/users/signup"];
+  const allowedPaths = ["/api/user/login", "/api/user/signup"];
   if (allowedPaths.includes(req.path)) {
     return next();
   } else {

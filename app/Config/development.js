@@ -5,7 +5,7 @@ const User = db.users;
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `app/uploads/data/${req.url.split("/")[2]}`);
+    cb(null, `app/uploads/data/${req.url.split("/")[1]}`);
   },
   filename: async (req, file, cb) => {
     const { id } = req.params;

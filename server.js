@@ -20,6 +20,6 @@ app.use(verifyJwt);
 //   console.log("db has been re sync");
 // });
 
-app.use("/api", userRoutes);
+app.use("/api/user", userRoutes);
 
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));
