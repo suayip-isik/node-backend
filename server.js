@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
 import userRoutes from "./app/Routes/userRoutes.js";
+import { verifyJwt } from "./app/Middleware/verifyJwt.js";
 
 const PORT = process.env.PORT || 8080;
 
@@ -11,6 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(verifyJwt);
 
 // WATNING: only for testing sequelize.sync({ force: true })
 // db.sequelize.sync({ force: true }).then(() => {

@@ -1,5 +1,4 @@
 import db from "../Models/index.js";
-import jwt from "jsonwebtoken";
 const User = db.users;
 
 const saveUser = async (req, res, next) => {
@@ -35,19 +34,4 @@ const saveUser = async (req, res, next) => {
   }
 };
 
-const auth = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null)
-    return res.status(401).json({
-      message: "Token gerekli",
-    });
-
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-    if (err) return res.status(403).json({ message: "Geçersiz token" });
-    req.user = user;
-    next();
-  });
-};
-
-export { saveUser, auth };
+export { saveUser };
