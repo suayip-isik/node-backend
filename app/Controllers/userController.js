@@ -115,19 +115,20 @@ const getUsers = async (req, res) => {
   }
 };
 
-const uploadPhoto = async (req, res) => {
+const uploadUserProfilePhoto = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { file } = req;
-    if (!file) {
-      return res.status(400).json({ error: "No file uploaded" });
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
     }
-    res.json({
-      message: "File uploaded successfully",
-      filename: file.filename,
-    });
+    res
+      .status(200)
+      .json({ status: true, message: "Profil fotoğrafı güncellendi", user });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Bir hata oluştu" });
   }
 };
 
-export { signup, login, getUsers, uploadPhoto };
+export { signup, login, getUsers, uploadUserProfilePhoto };

@@ -35,10 +35,6 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      // photo: {
-      //   type: DataTypes.STRING,
-      //   allowNull: true,
-      // },
       birthday: {
         type: DataTypes.DATEONLY,
         allowNull: true,

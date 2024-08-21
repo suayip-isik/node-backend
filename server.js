@@ -16,10 +16,10 @@ app.use(cookieParser());
 app.use(verifyJwt);
 
 // WATNING: only for testing sequelize.sync({ force: true })
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("db has been re sync");
-});
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log("db has been re sync");
+// });
 
-app.use("/api/users", userRoutes);
+app.use("/api", userRoutes);
 
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));

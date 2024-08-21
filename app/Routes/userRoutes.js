@@ -3,7 +3,7 @@ import {
   signup,
   login,
   getUsers,
-  uploadPhoto,
+  uploadUserProfilePhoto,
 } from "../Controllers/userController.js";
 import { saveUser } from "../Middleware/userAuth.js";
 import { upload } from "../Config/index.js";
@@ -16,6 +16,10 @@ router.post("/login", login);
 
 router.get("/users", getUsers);
 
-router.post("/uploads", upload.single("file"), uploadPhoto);
+router.post(
+  "/users/uploadUserProfilePhoto/:id",
+  upload.single("file"),
+  uploadUserProfilePhoto
+);
 
 export default router;
