@@ -2,17 +2,37 @@ import bcrypt from "bcrypt";
 import db from "../Models/index.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import moment from "moment";
 dotenv.config();
 
 const User = db.users;
 
 const signup = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
+    const {
+      userName,
+      email,
+      password,
+      name,
+      surname,
+      phone,
+      birthday,
+      gender,
+      country,
+      city,
+    } = req.body;
+    let formattedBirthday = moment(birthday, "D-M-YYYY");
     const data = {
       userName,
       email,
       password: await bcrypt.hash(password, 10),
+      name,
+      surname,
+      phone,
+      formattedBirthday,
+      gender,
+      country,
+      city,
     };
 
     const user = await User.create(data);
@@ -23,7 +43,7 @@ const signup = async (req, res) => {
       });
 
       res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-      return res.status(201).send(user);
+      return res.status(201).json({ ...user.dataValues, token });
     } else {
       return res.status(409).json({
         success: false,
@@ -46,8 +66,6 @@ const login = async (req, res) => {
       },
     });
 
-    console.log("user:", user);
-
     if (user) {
       const isSame = await bcrypt.compare(password, user.password);
 
@@ -56,11 +74,7 @@ const login = async (req, res) => {
           expiresIn: 1 * 24 * 60 * 60 * 1000,
         });
 
-        console.log("token:", token);
-
         res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-        console.log("user", JSON.stringify(user, null, 2));
-        console.log(token);
         return res.status(201).send({ ...user.dataValues, token });
       } else {
         return res.status(401).send("Authentication failed 1");
