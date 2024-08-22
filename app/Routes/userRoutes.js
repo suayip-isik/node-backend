@@ -23,13 +23,20 @@ router.post(
   function (req, res, next) {
     upload.single("file")(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log("girdi");
         res.status(413).json({
           success: false,
-          message: "Resim boyutu en fazla 5 MB olmalıdır.",
+          message: err.message,
         });
+      } else if (err) {
+        res.status(400).json({
+          success: false,
+          message: err.message,
+        });
+      } else if (!req.file) {
+        return res.end("File is required!");
+      } else {
+        next();
       }
-      next();
     });
   },
   uploadUserProfilePhoto
