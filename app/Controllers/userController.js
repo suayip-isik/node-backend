@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import db from "../Models/index.js";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import moment from "moment";
+import { generateAndSendToken } from "../Helpers/index.js";
+
 dotenv.config();
 
 const User = db.users;
@@ -30,7 +30,7 @@ const signup = async (req, res) => {
         });
       }
     }
-    let formattedBirthday = moment(birthday, "D-M-YYYY");
+    let formattedBirthday = new Date(birthday);
     const data = {
       userName,
       email,
@@ -47,11 +47,7 @@ const signup = async (req, res) => {
     const user = await User.create(data);
 
     if (user) {
-      let token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
-        expiresIn: 1 * 24 * 60 * 60 * 1000,
-      });
-
-      res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
+      let token = generateAndSendToken(user, res);
       return res.status(201).json({
         status: true,
         message: "Kullanıcı başarıyla kaydedildi",
@@ -84,12 +80,13 @@ const login = async (req, res) => {
       const isSame = await bcrypt.compare(password, user.password);
 
       if (isSame) {
-        let token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
-          expiresIn: 1 * 24 * 60 * 60 * 1000,
+        let token = generateAndSendToken(user, res);
+        return res.status(201).json({
+          status: true,
+          message: "Login işlemi başarıyla tamamlandı",
+          token,
+          user,
         });
-
-        res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-        return res.status(200).send({ ...user.dataValues, token });
       } else {
         return res.status(401).json({
           status: false,
@@ -131,4 +128,20 @@ const uploadUserProfilePhoto = async (req, res) => {
   }
 };
 
-export { signup, login, getUsers, uploadUserProfilePhoto };
+const getUserProfilePhoto = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+    }
+    res.sendFile(`${user.userName}.jpg`, {
+      root: "app/uploads/data/uploadUserProfilePhoto/",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Bir hata oluştu" });
+  }
+};
+
+export { signup, login, getUsers, uploadUserProfilePhoto, getUserProfilePhoto };
