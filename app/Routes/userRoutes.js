@@ -28,7 +28,7 @@ router.post(
           message: err.message,
         });
       } else if (err) {
-        res.status(400).json({
+        res.status(415).json({
           success: false,
           message: err.message,
         });
