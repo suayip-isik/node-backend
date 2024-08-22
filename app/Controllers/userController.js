@@ -135,7 +135,7 @@ const getUserProfilePhoto = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "Kullanıcı bulunamadı" });
     }
-    res.sendFile(`${user.userName}.jpg`, {
+    res.sendFile(`${user.id}.jpg`, {
       root: "app/uploads/data/uploadUserProfilePhoto/",
     });
   } catch (error) {

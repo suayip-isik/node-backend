@@ -21,7 +21,7 @@ router.get("/getAllUsers", getUsers);
 router.post(
   "/uploadUserProfilePhoto/:id",
   function (req, res, next) {
-    upload.single("file")(req, res, function (err) {
+    upload.single("image")(req, res, function (err) {
       if (err instanceof multer.MulterError) {
         res.status(413).json({
           success: false,
@@ -44,7 +44,7 @@ router.post(
 
 router.get(
   "/getUserProfilePhoto/:id",
-  upload.single("file"),
+  upload.single("image"),
   getUserProfilePhoto
 );
 
