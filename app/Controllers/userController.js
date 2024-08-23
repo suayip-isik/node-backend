@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import db from "../Models/index.js";
 import dotenv from "dotenv";
-import { generateAndSendToken } from "../Helpers/index.js";
+import { generateAndSendToken } from "../Utils/index.js";
 
 dotenv.config();
 
