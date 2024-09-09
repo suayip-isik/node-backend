@@ -5,7 +5,9 @@ import {
   getUsers,
   uploadUserProfilePhoto,
   getUserProfilePhoto,
-} from "../Controllers/userController.js";
+  updateProfile,
+  deleteUser,
+} from "../Controllers/index.js";
 import { saveUser } from "../Middleware/index.js";
 import { upload } from "../Config/index.js";
 import multer from "multer";
@@ -47,5 +49,9 @@ router.get(
   upload.single("image"),
   getUserProfilePhoto
 );
+
+router.post("/updateUser/:id", updateProfile);
+
+router.delete("/deleteUser/:id", deleteUser);
 
 export default router;

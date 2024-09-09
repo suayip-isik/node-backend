@@ -144,4 +144,38 @@ const getUserProfilePhoto = async (req, res) => {
   }
 };
 
-export { signup, login, getUsers, uploadUserProfilePhoto, getUserProfilePhoto };
+const updateProfile = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+    }
+    const updatedUser = await user.update(req.body);
+    return res.status(200).json({
+      status: true,
+      message: "Profil bilgileri güncellendi",
+      updatedUser,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Bir hata oluştu" });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+    }
+    await user.destroy();
+    return res.status(200).json({ message: "Kullanıcı silindi" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Bir hata oluştu" });
+  }
+};
+
+export { signup, login, getUsers, uploadUserProfilePhoto, getUserProfilePhoto, updateProfile, deleteUser };
